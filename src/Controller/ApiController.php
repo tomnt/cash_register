@@ -11,7 +11,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ApiController extends AbstractController
 {
-  /** Controller method for the Cash Register API
+  /**
+   * Controller method for the Cash Register API
    *
    * @param Request $symfonyRequest Request object
    *     Example; $symfonyRequest->getRequestUri() =
