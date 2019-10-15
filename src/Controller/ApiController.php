@@ -32,12 +32,10 @@ class ApiController extends AbstractController
       'change' => round($change,2),
       'denominations' => $changeDenominations
     ];
-    $symfonyResponse = new Response(
-      'Content',
-      Response::HTTP_OK
-    );
-    $symfonyResponse->setContent(json_encode($arrReturnValues));
-    return $symfonyResponse;
+    $response  = new Response();
+    $response ->setContent(json_encode($arrReturnValues));
+    $response->headers->set('Content-Type', 'application/json');
+    return $response;
   }
 
   /**
