@@ -8,7 +8,7 @@ class DenominationTest extends TestCase
 {
   public function testGetMessages()
   {
-    $amount = 1234;
+    $amount = 12.34;
     $aResult=Denomination::getDenominations($amount,self::getACurrency());
     $this->assertEquals(1,$aResult[0]['count']);
     $this->assertEquals(10,$aResult[0]['amount']);
