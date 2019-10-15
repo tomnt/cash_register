@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Lib;
-
 
 class Denomination
 {
@@ -13,14 +11,12 @@ class Denomination
    */
   public static function getDenominations(float $amount, array $aCurrency): array
   {
+    $amount = $amount*100;
     $aCurrencySorted=[];
     foreach ($aCurrency as $currency) {
       $aCurrencySorted[$currency->getAmount()*100] =  $currency;
     }
     krsort($aCurrencySorted);
-
-
-
     $arrDenominations = [];
     foreach ($aCurrencySorted as $currency) {
       $currencyAmount = $currency->getAmount() * 100;

@@ -8,8 +8,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-use AppBundle\Entity\Currency as Currency;
-
 class ApiController extends AbstractController
 {
   /**
@@ -18,14 +16,14 @@ class ApiController extends AbstractController
    */
   public function cash_register(Request $symfonyRequest): Response
   {
-    $total_cost = (int)$symfonyRequest->get('total_cost');
-    $amount_provided = (int)$symfonyRequest->get('amount_provided');
-    $change = (float)($amount_provided - $total_cost);
+    $totalCostCent = (int)$symfonyRequest->get('total_cost');
+    $amountProvidedCent = (int)$symfonyRequest->get('amount_provided');
+    $changeDollar = (float)($amountProvidedCent - $totalCostCent)/100;
     $currencyRepository = $this->getDoctrine()->getRepository(\App\Entity\Currency::class);
     $aCurrency=$currencyRepository->findBy(['is_active'=>true],['amount'=>'DESC']);
-    $changeDenominations = Denomination::getDenominations($change,$aCurrency);
+    $changeDenominations = Denomination::getDenominations($changeDollar,$aCurrency);
     $arrReturnValues = [
-      'change' => $change,
+      'change' => $changeDollar,
       'denominations' => $changeDenominations
     ];
     $symfonyResponse = new Response(
