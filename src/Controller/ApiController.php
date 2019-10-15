@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
+use App\Lib\CurrencyValidator;
 use App\Lib\Denomination;
-use mysql_xdevapi\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,14 +22,14 @@ class ApiController extends AbstractController
    */
   public function cash_register(Request $symfonyRequest): Response
   {
-    $totalCostCent = self::getValidatedCurrency('total_cost', $symfonyRequest);
-    $amountProvidedCent = self::getValidatedCurrency('amount_provided', $symfonyRequest);
-    $changeDollar = $amountProvidedCent - $totalCostCent;
+    $totalCost = self::getValidatedCurrency('total_cost', $symfonyRequest);
+    $amountProvided = self::getValidatedCurrency('amount_provided', $symfonyRequest);
+    $change = $amountProvided - $totalCost;
     $currencyRepository = $this->getDoctrine()->getRepository(\App\Entity\Currency::class);
     $aCurrency=$currencyRepository->findBy(['is_active'=>true],['amount'=>'DESC']);
-    $changeDenominations = Denomination::getDenominations($changeDollar,$aCurrency);
+    $changeDenominations = Denomination::getDenominations($change,$aCurrency);
     $arrReturnValues = [
-      'change' => round($changeDollar,2),
+      'change' => round($change,2),
       'denominations' => $changeDenominations
     ];
     $symfonyResponse = new Response(
@@ -52,19 +52,10 @@ class ApiController extends AbstractController
    * @throws \Exception Throws an exception if the given currency value is not numeric or exceeds supported precision.
    */
   private static function getValidatedCurrency(string $paramName, Request $symfonyRequest): float{
-    $sCurrencyValue = $symfonyRequest->get($paramName);
-    $aNodeCurrencyValue = explode('.',$sCurrencyValue);
-    if(isset($aNodeCurrencyValue[1])){
-      $sAfterDecimalPoint=$aNodeCurrencyValue[1];
-    }else{
-      $sAfterDecimalPoint = '0';
-    }
-    if(!is_numeric($sCurrencyValue )){
-      throw new \Exception('Given value for '.$paramName.' = '.$sCurrencyValue.' is not numeric');
-    }elseif(strlen($sAfterDecimalPoint)>2){
-      throw new \Exception('Precision for the given value for '.$paramName.' = '.$sCurrencyValue.' is supported.');
-    }else{
-      return (float)$sCurrencyValue;
+    try{
+      return CurrencyValidator::validate($symfonyRequest->get($paramName));
+    }catch(\Exception $e){
+      throw new \Exception("Error on value for paramName = '".$paramName."':  ".$e->getMessage());
     }
   }
 
