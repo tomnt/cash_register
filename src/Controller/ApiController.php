@@ -11,7 +11,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class ApiController extends AbstractController
 {
   /**
-   * http://localhost:8000/api/cash_register/12300/20000/
+   * Example;
+   * http://localhost:8000/api/cash_register/8766/10000/
    * @Route("/api/cash_register/{total_cost}/{amount_provided}/", name="cash_register", requirements={"params"=".+"})
    */
   public function cash_register(Request $symfonyRequest): Response

@@ -5,9 +5,15 @@ namespace App\Lib;
 class Denomination
 {
   /**
-   * @param float $amount
-   * @param App\Entity\Currency[] $aCurrency
-   * @return array
+   * Obtains an array of count and type of currency corresponding to given dollar amount.
+   *
+   * @param float $amount Amount in dollar. Example: 12.34
+   * @param App\Entity\Currency[] $aCurrency Array of available Currency objects
+   * @return array An array of count and currency
+   *     Example;
+   *         [["count":1,"amount":10,"name":"Ten Dollars","type":"note"],
+   *          ["count":2,"amount":1,"name":"One Dollar","type":"note"],
+   *          ...
    */
   public static function getDenominations(float $amount, array $aCurrency): array
   {
