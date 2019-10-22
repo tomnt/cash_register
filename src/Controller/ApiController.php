@@ -39,7 +39,8 @@ class ApiController extends AbstractController
   }
 
   /**
-   * Obtain Change corresponding given parametes
+   * Obtain Change corresponding given parameters
+   *
    * @param Request $request Request object
    * @return float Change
    * @throws \Exception
@@ -65,9 +66,10 @@ class ApiController extends AbstractController
 
   /**
    * Obtain currency value corresponding to given param name and Request object.
+   *
    * @param string $paramName Param name
    *     Example: total_cost
-   * @param Request $symfonyRequest Request object
+   * @param Request $request Request object
    *     Example; $symfonyRequest->getRequestUri() =
    *         http://localhost:8000/api/cash_register/?total_cost=87.66&amount_provided=100.00
    * @return float currency value
